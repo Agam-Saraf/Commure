@@ -1,6 +1,6 @@
 # hazelcast
 
-**Status:** See [README capability matrix](../../README.md#capability-matrix).
+**Status:** See [starter capability matrix](../starter.md#capability-matrix).
 
 ## Purpose
 
