@@ -32,6 +32,167 @@
   border-color: var(--accent);
 }
 
+.video-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.upload-button {
+  font: inherit;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.upload-button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.download-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.request-id-note {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.upload-button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.upload-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hint {
+  margin: 0;
+  font-size: 14px;
+}
+
+.error-banner {
+  max-width: 560px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #f04438;
+  border-radius: 6px;
+  background: rgba(240, 68, 56, 0.08);
+  color: #b42318;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+
+  .request-id {
+    font-family: var(--mono);
+    font-size: 13px;
+    margin-top: 0.35rem;
+  }
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.preview {
+  margin: 0;
+  flex: 1 1 320px;
+  max-width: 480px;
+
+  figcaption {
+    margin-bottom: 0.4rem;
+    color: var(--text-h);
+  }
+}
+
+.preview-frame {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+
+  video {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+  }
+}
+
+.buffer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+
+  &.inline {
+    position: static;
+    flex-direction: row;
+    background: none;
+    color: inherit;
+  }
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.buffer.inline .spinner {
+  width: 18px;
+  height: 18px;
+  border-color: var(--border);
+  border-top-color: var(--accent);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .hero {
   position: relative;
 

@@ -25,6 +25,18 @@ else
   report "HelloControllerTest" FAIL
 fi
 
+if (cd "${COMMURE_ROOT}/backend" && ./mvnw -q test -Dtest='Video*Test,Transform*Test,LongVideo*Test,DotEnv*Test'); then
+  report "video backend tests" PASS
+else
+  report "video backend tests" FAIL
+fi
+
+if (cd "${COMMURE_ROOT}/frontend" && npm test); then
+  report "frontend tests" PASS
+else
+  report "frontend tests" FAIL
+fi
+
 if (cd "${COMMURE_ROOT}/frontend" && npm run lint); then
   report "frontend lint" PASS
 else

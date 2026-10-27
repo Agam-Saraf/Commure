@@ -7,6 +7,7 @@ import {
   logoutLocal,
   oauthEnabled,
 } from './oauthPkce'
+import VideoUploader from './video/VideoUploader'
 
 function App() {
   const [message, setMessage] = useState(null)
@@ -105,6 +106,8 @@ function App() {
       {!loading && !error && message && (
         <p className="status success">{message}</p>
       )}
+
+      <VideoUploader />
 
       {oauthEnabled() && (
         <div className="oauth-panel">

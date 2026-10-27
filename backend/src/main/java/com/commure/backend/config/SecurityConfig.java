@@ -25,6 +25,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.GET, "/api/hello").permitAll()
 				.requestMatchers("/api/demo/**").permitAll()
+				.requestMatchers("/api/videos/**").permitAll()
 				.requestMatchers("/graphql", "/graphiql", "/graphiql/**").permitAll()
 				.requestMatchers("/ws/**").permitAll()
 				.requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()

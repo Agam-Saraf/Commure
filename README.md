@@ -28,6 +28,31 @@ Mongo/Redis/Rabbit actuator health checks are off by default and turn on only wi
 
 Only one practice workspace can own the shared host ports at a time. If another practice is running, stop its infrastructure before starting the starter infrastructure. If a running shared container has lost its published ports, repair it with `docker compose -f infrastructure/compose.yaml up -d --force-recreate mongodb redis rabbitmq`. This briefly restarts these services and preserves their existing volumes; do not use `down -v`.
 
+## Grayscale video transform
+
+Team setup, commands and test results: [docs/video-transform.md](docs/video-transform.md).
+
+Upload an MP4 (50 MB, 2 minutes, 1920x1080 max), preview it, and convert it to grayscale through the third-party transform API. Both videos are kept in backend memory (latest 20 uploads or 500 MB; lost on restart).
+
+Clips within the API limits (3 MB, 10 s, 600 frames) are sent as-is. Anything larger is split with ffmpeg into equal parts under 10 s (re-encoded to H.264, at most 1080p/60 fps and ~1.5 Mbit/s so each part stays under 3 MB), sent in parallel, and joined back in timeline order. If any part fails, the whole conversion fails with a message naming the part. Long videos need `ffmpeg`/`ffprobe` on the backend's `PATH` (`brew install ffmpeg`, or set `FFMPEG_PATH`/`FFPROBE_PATH`); without it only API-sized clips are accepted. Output has no audio, because the transform API returns video only.
+
+Put credentials in a repo-root `.env` (see `.env.example`; `KEY=value` or `export KEY='value'`). Real environment variables override it. The token stays on the backend.
+
+```bash
+BASE_URL=https://...
+TRANSFORM_SERVICE_TOKEN=...
+```
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /api/videos` (multipart `file`) | Validate and store the original; `201` with `id` |
+| `POST /api/videos/{id}/transform` | Call the transform API and store the grayscale result |
+| `GET /api/videos/{id}/transformed` | Stream the grayscale MP4 (supports Range) |
+
+Errors are JSON `{code, message, requestId, retryAfterSeconds}`; `429`/`503` also carry `Retry-After`. The backend caps upstream calls at 6 concurrent and 12 starts per second, and retries short `Retry-After` waits (`transform.*` and `video.*` in `application.properties`).
+
+Tests: `./mvnw test -Dtest='Video*Test,Transform*Test,LongVideo*Test'` (includes a fake upstream on a real socket; ffmpeg tests are skipped when ffmpeg is missing) and `npm test` in `frontend/`. With the backend running, `./scripts/simulate-video.sh [upload|transform|long|all]` exercises the live workflow over HTTP. The `transform` and `long` steps call the real API and write `transformed.mp4` / `transformed-long.mp4`.
+
 ## Verification
 
 ```bash
